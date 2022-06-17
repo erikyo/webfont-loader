@@ -283,7 +283,7 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 			$font_files = $this->get_remote_files_from_css();
 			$stored     = get_site_option( 'downloaded_font_files', array() );
 			$change     = false; // If in the end this is true, we need to update the cache option.
-			
+
 			if ( ! defined( 'FS_CHMOD_DIR' ) ) {
 				define( 'FS_CHMOD_DIR', ( 0755 & ~ umask() ) );
 			}
@@ -418,7 +418,12 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 					}
 
 					// Add the file URL.
-					$result[ $font_family ][] = rtrim( ltrim( $match[0], 'url(' ), ')' );
+					$font_family_url = rtrim( ltrim( $match[0], 'url(' ), ')' );
+
+					// Make sure to convert relative URLs to absolute.
+					$font_family_url = $this->get_absolute_path( $font_family_url );
+
+					$result[ $font_family ][] = $font_family_url;
 				}
 
 				// Make sure we have unique items.
@@ -438,7 +443,7 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 		protected function write_stylesheet() {
 			$file_path  = $this->get_local_stylesheet_path();
 			$filesystem = $this->get_filesystem();
-			
+
 			if ( ! defined( 'FS_CHMOD_DIR' ) ) {
 				define( 'FS_CHMOD_DIR', ( 0755 & ~ umask() ) );
 			}
@@ -626,6 +631,26 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 				WP_Filesystem();
 			}
 			return $wp_filesystem;
+		}
+
+		/**
+		 * Get an absolute URL from a relative URL.
+		 *
+		 * @access protected
+		 *
+		 * @param string $url The URL.
+		 *
+		 * @return string
+		 */
+		protected function get_absolute_path( $url ) {
+
+			// If dealing with a root-relative URL.
+			if ( 0 === stripos( $url, '/' ) ) {
+				$parsed_url = parse_url( $this->remote_url );
+				return $parsed_url['scheme'] . '://' . $parsed_url['hostname'] . $url;
+			}
+
+			return $url;
 		}
 	}
 }

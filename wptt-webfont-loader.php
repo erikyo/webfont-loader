@@ -419,6 +419,7 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 
 					// Add the file URL.
 					$font_family_url = rtrim( ltrim( $match[0], 'url(' ), ')' );
+					$font_family_url = str_replace( '"', '', $font_family_url );
 
 					// Make sure to convert relative URLs to absolute.
 					$font_family_url = $this->get_absolute_path( $font_family_url );

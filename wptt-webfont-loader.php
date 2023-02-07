@@ -240,8 +240,8 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 		 * Get remote file contents.
 		 *
 		 * @access public
-		 * @since 1.0.0
 		 * @return string Returns the remote URL contents.
+		 * @since 1.0.0
 		 */
 		public function get_remote_url_contents() {
 
@@ -264,6 +264,19 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 			// Early exit if there was an error.
 			if ( is_wp_error( $response ) ) {
 				return '';
+			}
+
+			// The response is invalid, report the error message at the top of body and avoid to enqueue the error response as style.
+			if ( !empty($response['response']) && 200 !== $response['response']['code'] ) {
+				return "body::before {
+					content: 'WPTT Error: {$response['response']['message']}';
+					display: block;
+					font-family: monospace;
+					padding: 1rem;
+					background-color: black;
+					color:white;
+					font-weight: bold;
+				}";
 			}
 
 			// Get the CSS from our response.

@@ -1,5 +1,5 @@
 {
-    "name": "wptt/webfont-loader",
+    "name": "erikyo/webfont-loader",
     "type": "package",
     "description": "Locally host webfonts.",
     "keywords": [

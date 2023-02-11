@@ -267,7 +267,7 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 			}
 
 			// The response is invalid, report the error message at the top of body and avoid to enqueue the error response as style.
-			if ( !empty($response['response']) && 200 !== $response['response']['code'] ) {
+			if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 				return "body::before {
 					content: 'WPTT Error: {$response['response']['message']}';
 					display: block;

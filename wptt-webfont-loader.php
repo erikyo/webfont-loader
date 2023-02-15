@@ -546,7 +546,7 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 		 */
 		public function get_base_path() {
 			if ( ! $this->base_path ) {
-				$this->base_path = apply_filters( 'wptt_get_local_fonts_base_path', $this->get_filesystem()->wp_content_dir() );
+				$this->base_path = apply_filters( 'wptt_get_local_fonts_base_path', get_template_directory() );
 			}
 			return $this->base_path;
 		}
@@ -560,7 +560,7 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 		 */
 		public function get_base_url() {
 			if ( ! $this->base_url ) {
-				$this->base_url = apply_filters( 'wptt_get_local_fonts_base_url', content_url() );
+				$this->base_url = apply_filters( 'wptt_get_local_fonts_base_url', get_template_directory_uri() );
 			}
 			return $this->base_url;
 		}
